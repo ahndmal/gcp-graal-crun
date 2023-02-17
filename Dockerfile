@@ -1,11 +1,12 @@
-FROM findepi/graalvm:java17-all
+FROM findepi/graalvm:java17-all AS BUILDER
 COPY ./ ./
 RUN apt install curl -y && \
     curl -O https://dlcdn.apache.org/maven/maven-3/3.9.0/binaries/apache-maven-3.9.0-bin.tar.gz && \
     tar -xf apache-maven-3.9.0-bin.tar.gz && \
-    apache-maven-3.9.0/bin/mvn -Dnative -Dagent clean package && \
-    ls target
+    apache-maven-3.9.0/bin/mvn -Pnative -Dagent clean package
 CMD ["target/my-app"]
+
+FROM debian:stable-slim
 
 #FROM debian:stable-slim
 #LABEL maintainer="Piotr Findeisen <piotr.findeisen@gmail.com>"
