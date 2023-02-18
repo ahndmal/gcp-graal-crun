@@ -4,9 +4,15 @@ RUN apt install curl -y && \
     curl -O https://dlcdn.apache.org/maven/maven-3/3.9.0/binaries/apache-maven-3.9.0-bin.tar.gz && \
     tar -xf apache-maven-3.9.0-bin.tar.gz && \
     apache-maven-3.9.0/bin/mvn -Pnative -Dagent clean package
-CMD ["target/my-app"]
+#CMD ["target/my-app"]
 
 FROM debian:stable-slim
+COPY --from=BUILDER /target/my-app /my-app
+COPY --from=BUILDER /src/main/resources/index.html /src/main/resources/index.html
+CMD ["/my-app"]
+
+
+# ==============================================
 
 #FROM debian:stable-slim
 #LABEL maintainer="Piotr Findeisen <piotr.findeisen@gmail.com>"
